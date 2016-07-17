@@ -15,3 +15,11 @@ p {
 div {
     background-color:#ff0000;
 }
+
+#content {
+    background-color:#00f;
+}
+
+.subheading {
+    background-color:#0ff;
+}
