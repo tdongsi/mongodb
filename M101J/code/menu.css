@@ -15,6 +15,11 @@ ul {
 
 ul li
 {
+    width:180px;
+    text-align:center;
     background-color:#cc9;
-    border: 2px solid black;
+    margin: 5px;
+    padding: 3px 0 0 10px;
+    border-bottom: 3px solid black;
+    border-left: 10px solid #c33;
 }
