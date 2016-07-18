@@ -1,25 +1,3 @@
-body { 
-    background-color:BlanchedAlmond;
-}
-
-/* You can stack up multiple selectors */
-h1,h2 {
-    background-color:#cccc99;
-}
-
 p {
-    font-size:larger;
-    background-color:#0f0;
-}
-
-div {
-    background-color:#ff0000;
-}
-
-#content {
-    background-color:#00f;
-}
-
-.subheading {
-    background-color:#0ff;
+    background-color:Green;
 }
