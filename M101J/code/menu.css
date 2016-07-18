@@ -9,17 +9,29 @@ body
     background-color:#ccc;
 }
 
-ul {
+.menu 
+{
     list-style:none;
+    text-align:center;
 }
 
-ul li
+.menu li:hover
 {
+    background-color:#c99;
+}
+
+.menu li
+{
+    display:inline-block;
     width:180px;
     text-align:center;
     background-color:#cc9;
-    margin: 5px;
     padding: 3px 0 0 10px;
     border-bottom: 3px solid black;
-    border-left: 10px solid #c33;
+}
+
+.menu li a
+{
+    text-decoration:none;
+    color: #000;
 }
