@@ -1,0 +1,17 @@
+* 
+{
+    padding:0px;
+    margin:0px;    
+}
+
+ul {
+    background-color:#ccc;
+    list-style:none;
+}
+
+ul li:nth-child(3)
+{
+    background-color:#cc9;
+    padding:10px;
+    margin:20px;
+}
