@@ -1,0 +1,37 @@
+* 
+{
+    padding:0px;
+    margin:0px;    
+}
+
+body
+{
+    background-color:#ccc;
+}
+
+.menu 
+{
+    list-style:none;
+    text-align:center;
+}
+
+.menu li:hover
+{
+    background-color:#c99;
+}
+
+.menu li
+{
+    display:inline-block;
+    width:180px;
+    text-align:center;
+    background-color:#cc9;
+    padding: 3px 0 0 10px;
+    border-bottom: 3px solid black;
+}
+
+.menu li a
+{
+    text-decoration:none;
+    color: #000;
+}
