@@ -3,10 +3,15 @@
 const http = require('http');
 const fs = require('fs');
 const express = require('express');
+var bodyParser = require('body-parser');
+var multer = require('multer'); // v1.0.5
+var upload = multer(); // for parsing multipart/form-data
 
 const app = express();
 // console.log(typeof app); // should return function
 // app.use(express.static('www')); // configure function object
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 
 const widgets = [
@@ -19,6 +24,8 @@ const new_widget = {
     name: 'My widget',
     color: 'blue'
 }
+
+let lastId = 0;
 
 
 // ES6: Destructuring
@@ -40,16 +47,19 @@ const mongo = new Promise( function(resolve, reject) {
 });
 
 
-app.post('/api/widgets', function(req, res) {
+// POST method: add an item
+app.post('/api/widgets', upload.array(), function(req, res) {
 
     mongo.then(function(db) {
-        const collection = db.collection('widgets');
-        collection.insertMany(widgets, function(err, result) {
+        console.log(req.body);
+        var temp = req.body;
+        temp.id = ++lastId;
+        db.collection('widgets').insertOne(temp, function(err, result) {
             if (err) {
                 res.status(500).send(err.message);
             }
 
-            console.log("Insert many items");
+            console.log("Insert an item");
             res.status(200).send("Success");
         });
         
@@ -60,12 +70,13 @@ app.post('/api/widgets', function(req, res) {
 })
 
 app.delete('/api/widgets', function(req, res) {
-    try {
-        widgets.pop();
-        res.json(widgets);
-    } catch (err) {
+    mongo.then(function(db) {
+        const collection = db.collection('widgets');
+        collection.drop();
+        res.status(500).send("Delete complete");
+    }).catch(function(err) {
         res.status(500).send(err.message);
-    }
+    });
 })
 
 app.get('/api/widgets/:widgetId', function(req, res) {
