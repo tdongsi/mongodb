@@ -5,7 +5,7 @@ const fs = require('fs');
 const express = require('express');
 
 const app = express();
-console.log(typeof app); // should return function
+// console.log(typeof app); // should return function
 // app.use(express.static('www')); // configure function object
 
 
@@ -21,17 +21,20 @@ const new_widget = {
 }
 
 
-
-var MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
+// ES6: Destructuring
+const {MongoClient} = require('mongodb');
 // Connection URL 
-var url = 'mongodb://localhost:27017/myproject';
+var url = 'mongodb://localhost:27017/restapp';
 // Use connect method to connect to the Server 
 MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  console.log("Connected correctly to server");
+    if (err) {
+        console.log(err);
+        return;
+    }
+
+    console.log("Connected correctly to server");
  
-  db.close();
+    db.close();
 });
 
 
