@@ -3,15 +3,15 @@
 const http = require('http');
 const fs = require('fs');
 const express = require('express');
-const bodyParser = require('body-parser');
-const multer = require('multer'); // v1.0.5
-const upload = multer(); // for parsing multipart/form-data
+var bodyParser = require('body-parser');
+var multer = require('multer'); // v1.0.5
+var upload = multer(); // for parsing multipart/form-data
 
 const app = express();
 // console.log(typeof app); // should return function
 // app.use(express.static('www')); // configure function object
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 
 const widgets = [
@@ -29,7 +29,7 @@ let lastId = 0;
 
 
 // ES6: Destructuring
-const {MongoClient} = require('mongodb');
+const {MongoClient, ObjectId} = require('mongodb');
 // Connection URL 
 var url = 'mongodb://localhost:27017/restapp';
 // Use connect method to connect to the Server 
@@ -48,14 +48,14 @@ const mongo = new Promise( function(resolve, reject) {
 
 
 // PUT method: replace an item
-app.put('/api/widgets/:widgetId', upload.array(), function(req, res) {
+app.put('/api/widgets/:widgetId', function(req, res) {
     mongo.then(function(db) {
         console.log("In PUT method");
         console.log(req.body);
         var temp = req.body;
         temp.id = parseInt(req.params.widgetId, 10);
 
-        db.collection('widgets').findOneAndReplace({"id": parseInt(req.params.widgetId, 10)}, temp, 
+        db.collection('widgets').findOneAndReplace({"_id": ObjectId(req.params.widgetId)}, temp, 
           {upsert: true, returnOriginal: false}, (err, queryOutput) => {
             if (err) {
                 res.status(500).send(err.message);
@@ -64,7 +64,7 @@ app.put('/api/widgets/:widgetId', upload.array(), function(req, res) {
             console.log("Old item: ");
             console.log(queryOutput);
             res.json(queryOutput.value);
-        });
+        })
     }).catch(function(err) {
         res.status(500).send(err.message);
     });
@@ -109,7 +109,8 @@ app.delete('/api/widgets', function(req, res) {
 // GET an item
 app.get('/api/widgets/:widgetId', function(req, res) {
     mongo.then(function(db) {
-        db.collection('widgets').findOne({"id": parseInt(req.params.widgetId, 10)}, (err, data) => {
+        db.collection('widgets')
+          .findOne({"id": parseInt(req.params.widgetId, 10)}, (err, data) => {
             if (err) {
                 res.status(500).send(err.message);
             }
