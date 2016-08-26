@@ -69,6 +69,8 @@ app.post('/api/widgets', upload.array(), function(req, res) {
 
 })
 
+
+// DELETE method
 app.delete('/api/widgets', function(req, res) {
     mongo.then(function(db) {
         const collection = db.collection('widgets');
@@ -79,12 +81,19 @@ app.delete('/api/widgets', function(req, res) {
     });
 })
 
+// GET an item
 app.get('/api/widgets/:widgetId', function(req, res) {
-    try {
-        res.json(widgets.find(w => w.id === parseInt(req.params.widgetId, 10)));
-    } catch (err) {
+    mongo.then(function(db) {
+        db.collection('widgets').findOne({"id": parseInt(req.params.widgetId, 10)}, (err, data) => {
+            if (err) {
+                res.status(500).send(err.message);
+            }
+
+            res.json(data);
+        })
+    }).catch(function(err) {
         res.status(500).send(err.message);
-    }
+    });
     
 })
 
