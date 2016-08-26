@@ -26,15 +26,17 @@ const {MongoClient} = require('mongodb');
 // Connection URL 
 var url = 'mongodb://localhost:27017/restapp';
 // Use connect method to connect to the Server 
-MongoClient.connect(url, function(err, db) {
-    if (err) {
-        console.log(err);
-        return;
-    }
 
-    console.log("Connected correctly to server");
- 
-    db.close();
+const mongo = new Promise( function(resolve, reject) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            reject(err);
+            return;
+        }
+
+        console.log("Connected correctly to server");
+        resolve(db);
+    });
 });
 
 
@@ -68,6 +70,14 @@ app.get('/api/widgets/:widgetId', function(req, res) {
 
 // get: only run for GET requests.
 app.get('/api/widgets', function(req, res) {
+
+    mongo.then(function(db) {
+        // get data from db
+        res.json(widgets);
+    }).catch( function(err) {
+        res.status(500).send(err.message);
+    });
+
     try {
         res.json(widgets);
     } catch (err) {
