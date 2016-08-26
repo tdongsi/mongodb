@@ -73,16 +73,17 @@ app.get('/api/widgets', function(req, res) {
 
     mongo.then(function(db) {
         // get data from db
-        res.json(widgets);
+        const collection = db.collection('widgets');
+        collection.find({}).toArray((err, data) => {
+            if (err) {
+                res.status(500).send(err.message);
+            }
+
+            res.json(data);
+        });
     }).catch( function(err) {
         res.status(500).send(err.message);
     });
-
-    try {
-        res.json(widgets);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
     
 })
 
