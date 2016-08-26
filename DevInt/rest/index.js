@@ -40,14 +40,23 @@ const mongo = new Promise( function(resolve, reject) {
 });
 
 
-app.post('/api/widgets/:widgetId', function(req, res) {
-    try {
-        new_widget.id = req.params.widgetId;
-        widgets.push(new_widget);
-        res.json(widgets);
-    } catch (err) {
+app.post('/api/widgets', function(req, res) {
+
+    mongo.then(function(db) {
+        const collection = db.collection('widgets');
+        collection.insertMany(widgets, function(err, result) {
+            if (err) {
+                res.status(500).send(err.message);
+            }
+
+            console.log("Insert many items");
+            res.status(200).send("Success");
+        });
+        
+    }).catch(function(err) {
         res.status(500).send(err.message);
-    }
+    });
+
 })
 
 app.delete('/api/widgets', function(req, res) {
